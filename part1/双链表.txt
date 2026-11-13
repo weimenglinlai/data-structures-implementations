@@ -1,0 +1,153 @@
+class Node:                             #双链表结点类
+    def __init__(self,value):           #构造基本结点
+        self.data = value               #设置数据域为指定数据
+        self.pre = None                 #设置直接前驱为空
+        self.next = None                #设置直接后继位空
+
+class DoubleLink:                       #双链表类
+    def __init__(self):                 #构造双链表
+        self.dhead = None               #设置头指针
+        self.delete_count = 0           #记录删除次数
+        self.search_count = 0          #记录查找次数
+
+    def is_empty(self):  #判断链表是否为空，空返回True
+        return self.dhead is None
+    
+    def length(self): #返回链表长度，即结点个数
+        count = 0
+        current = self.dhead
+        while current is not None:
+            count += 1
+            current = current.next
+        return count
+    
+    def add(self, value):  #头插法增加结点
+        new_node = Node(value)
+        if self.is_empty():
+            self.dhead = new_node
+        else:
+            new_node.next = self.dhead
+            self.dhead.pre = new_node
+            self.dhead = new_node
+    
+    def append(self, value): #尾插法增加结点
+        new_node = Node(value)
+        if self.is_empty():
+            self.dhead = new_node
+        else:
+            current = self.dhead
+            while current.next is not None:
+                current = current.next
+            current.next = new_node
+            new_node.pre = current
+    
+    def insert(self, value, index):  # 按指定索引下标序号插入结点
+        while index < 0 or index > self.length():
+            print("序号越界，请重新输入")
+            index = eval(input())
+        
+        if index == 0:
+            self.add(value)
+        elif index == self.length():
+            self.append(value)
+        else:
+            new_node = Node(value)
+            current = self.dhead
+            for _ in range(index-1):
+                current = current.next
+            new_node.next = current.next
+            new_node.pre = current
+            current.next.pre = new_node
+            current.next = new_node
+    
+    def traversal(self):  #遍历输出链表结点数据值
+        current = self.dhead
+        while current is not None:
+            print(current.data, end=' ')
+            current = current.next
+        print()
+    
+    def delete(self, value): #删除指定数据值的结点
+        current = self.dhead
+        found = False
+        position = 1
+        
+        while current is not None:
+            if current.data == value:
+                found = True
+                self.delete_count += 1
+                if current.pre is None:  # 删除头节点
+                    self.dhead = current.next
+                    if self.dhead is not None:
+                        self.dhead.pre = None
+                else:
+                    current.pre.next = current.next
+                    if current.next is not None:
+                        current.next.pre = current.pre
+                print(f"删除成功，位置{position}，总删除次数{self.delete_count}")
+                return
+            current = current.next
+            position += 1
+        
+        if not found:
+            print("无指定值的结点，不能删除")
+    
+    def search(self, value):  #根据给定数据值查找结点
+        current = self.dhead
+        found = False
+        position = 1
+        self.search_count = 0
+        
+        while current is not None:
+            if current.data == value:
+                found = True
+                self.search_count += 1
+                print(f"找到结点，位置{position}，查找到的结点个数{self.search_count}")
+            current = current.next
+            position += 1
+        
+        if not found:
+            print("结点不在双链表内")
+    
+    def Alert(self, index, newvalue):  #根据索引下标序号修改结点数据值
+        while index < 1 or index > self.length():
+            print("序号越界，请重新输入")
+            index = eval(input())
+        
+        current = self.dhead
+        for _ in range(index-1):
+            current = current.next
+        current.data = newvalue
+
+
+if __name__ == '__main__':
+    Dl = DoubleLink()
+    print("使用头插法增加2个结点：")
+    Dl.add(eval(input()))
+    Dl.add(eval(input()))
+    print("当前双链表为：",end='');Dl.traversal()
+    print("当前链表长度为%d" %Dl.length())
+    print("使用尾插法添加2个结点：")
+    Dl.append(eval(input()))
+    Dl.append(eval(input()))
+    print("当前双链表为：",end='');Dl.traversal()
+    print("当前链表长度为%d" %Dl.length())
+    print("指定索引下标和结点数值插入结点：")
+    num = eval(input())
+    value = eval(input())
+    Dl.insert(value,num)
+    print("当前双链表为：",end='');Dl.traversal()
+    print("当前链表长度为%d" %Dl.length())
+    print("指定数据值删除结点：")
+    Dl.delete(eval(input()))
+    print("当前双链表为：",end='');Dl.traversal()
+    print("指定数据值查找结点：")
+    Dl.search(eval(input()))
+    print("当前双链表为：",end='');Dl.traversal()
+    print("当前链表长度为%d" %Dl.length())
+    print("指定索引下标和修改值修改结点：")
+    num = eval(input())
+    value = eval(input())
+    Dl.Alert(num,value)
+    print("当前双链表为：",end='');Dl.traversal()
+    print("当前链表长度为%d" %Dl.length())

@@ -1,0 +1,67 @@
+class SqList:
+    def __init__(self, maxsize=10):
+        self.curlen = 5  # 顺序表的初始化长度
+        self.maxsize = maxsize  # 顺序表的最大长度
+        self.listitem = [1, 2, 3, 4, 5]  # 顺序表存储空间
+
+    def clear(self):
+        self.curlen = 0
+        self.listitem = []
+
+    def empty(self):
+        return self.curlen == 0
+
+    def length(self):
+        return self.curlen
+
+    def get(self, i):
+        if 0 <= i < self.curlen:
+            return self.listitem[i]
+        return None
+
+    def insert1(self, i, x):
+        if i < 0 or i > self.curlen:
+            print("插入位置非法")
+            return
+        if self.curlen >= self.maxsize:
+            print("顺序表已满，无法插入")
+            return
+        self.listitem.insert(i, x)
+        self.curlen += 1
+
+    def remove(self, i):
+        if i < 0 or i >= self.curlen:
+            print("删除位置非法")
+            return
+        del self.listitem[i]
+        self.curlen -= 1
+
+    def index(self, x):
+        try:
+            return self.listitem.index(x)
+        except ValueError:
+            return -1
+
+    def display(self):
+        for item in self.listitem:
+            print(item, end=" ")
+        print()
+
+list1=SqList()
+print("线性表为：")
+list1.display()
+print("线性表序号为1的元素是：")
+print(list1.get(1))
+print("线性表长度为%d" %list1.curlen)
+print("请输入要插入的元素序号及元素值：")
+num=int(input())
+data=int(input())
+list1.insert1(num,data)
+list1.display()
+print("请输入要删除的元素序号：")
+num=int(input())
+list1.remove(num)
+list1.display()
+print("请输入要查找的数据元素：" )
+num=int(input())
+print("元素序号为：%d" %list1.index(num))
